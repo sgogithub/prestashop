@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>espay</name>
+	<displayName><![CDATA[Espay Payment Gateways]]></displayName>
+	<version><![CDATA[0.1]]></version>
+	<description><![CDATA[Accept payments for your products via Espay Payment Gateways.]]></description>
+	<author><![CDATA[PT. Square Gate One]]></author>
+	<tab><![CDATA[payments_gateways]]></tab>
+	<confirmUninstall><![CDATA[Are you sure about removing these details?]]></confirmUninstall>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
