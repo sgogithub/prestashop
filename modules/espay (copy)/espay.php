@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /*
  * 2007-2015 PrestaShop
@@ -32,6 +32,11 @@ include (dirname(__FILE__) . '/lib/curl.php');
 
 class Espay extends PaymentModule {
 
+    private $_html;
+    private $_postErrors;
+    private $_typePayment;
+    private $_config_keys;
+
     public function __construct() {
         $this->name = 'espay';
         $this->tab = 'payments_gateways';
@@ -52,7 +57,7 @@ class Espay extends PaymentModule {
         $this->description = $this->l('Accept Online Payment Via ESPay Payment Gateways');
         $this->confirmUninstall = $this->l('Are you sure about removing these details?');
 
-        $this->_typePayment = array (
+        $this->_typePayment = [
             'PERMATAATM' => "ATM Transfer",
             'BIIATM' => "ATM Transfer",
             'BCAKLIKPAY' => "Online Payment",
@@ -72,13 +77,12 @@ class Espay extends PaymentModule {
             'MANDIRISMS' => 'Online Payment',
             'BNIDOB' => 'Online Payment',
             'FINPAY195' => 'Outlet Payment'
-        );
+        ];
 
-        $this->_config_keys = array (
+        $this->_config_keys = [
             'ESPAY_PAYMENT_TITLE',
             'ESPAY_ENABLE_FEE',
             'ESPAY_PAYMENT_KEY',
-            'ESPAY_SIGNATURE_KEY',
             'ESPAY_SUCCESS_STATUS',
             'ESPAY_FAILED_STATUS',
             'ESPAY_WAITING_STATUS',
@@ -98,7 +102,7 @@ class Espay extends PaymentModule {
             'ESPAY_BITCOIN_FEE',
             'ESPAY_DANAMONOB_FEE',
             'ESPAY_MANDIRISMS_FEE',
-        );
+        ];
 
         $config = Configuration::getMultiple($this->_config_keys);
 
@@ -152,8 +156,8 @@ class Espay extends PaymentModule {
             Configuration::set('ESPAY_MANDIRISMS_FEE', 0);
         }
     }
-    
-     public function install() {
+
+    public function install() {
         if (!parent::install() || !$this->registerHook('payment') || !$this->registerHook('orderConfirmation')) {
             return false;
         }
@@ -174,7 +178,8 @@ class Espay extends PaymentModule {
 
         return $status;
     }
- private function _postValidation() {
+
+    private function _postValidation() {
         if (Tools::isSubmit('btnSubmit')) {
             if (!Tools::getValue('ESPAY_PAYMENT_KEY')) {
                 $this->_postErrors [] = $this->l('ESPay Payment Key is required.');
@@ -222,7 +227,8 @@ class Espay extends PaymentModule {
                     return true;
         return false;
     }
- private function _displayForm() {
+
+    private function _displayForm() {
         $order_states = array();
         foreach (OrderState::getOrderStates($this->context->language->id) as $state) {
             array_push($order_states, array(
@@ -272,13 +278,6 @@ class Espay extends PaymentModule {
                         'type' => 'text',
                         'label' => 'ESPay Payment Key',
                         'name' => 'ESPAY_PAYMENT_KEY',
-                        'required' => true,
-                        'desc' => $this->l('Consult to ESpay Merchant Administrator for the value of this field.'),
-                    ),
-                     array(
-                        'type' => 'text',
-                        'label' => 'ESPay Signature Key',
-                        'name' => 'ESPAY_SIGNATURE_KEY',
                         'required' => true,
                         'desc' => $this->l('Consult to ESpay Merchant Administrator for the value of this field.'),
                     ),
@@ -515,13 +514,13 @@ class Espay extends PaymentModule {
         }
         return array_unique($tabView);
     }
-    
-     public function hookPayment($params) {
+
+    public function hookPayment($params) {
         if (!$this->active) {
             return;
         }
 
-        #var_dump($params['cart']->id);
+        var_dump($params['cart']->id);
         $cart = new CartCore($params['cart']->id);
         
         #var_dump($cart->getOrderTotal());
@@ -606,7 +605,8 @@ class Espay extends PaymentModule {
             }
         }
     }
-      private function _deleteOrderState($db_name) {
+
+    private function _deleteOrderState($db_name) {
         $id_order_state = ConfigurationCore::get($db_name);
         ConfigurationCore::deleteByName($db_name);
         $orderState = new OrderState($id_order_state);
@@ -639,7 +639,8 @@ class Espay extends PaymentModule {
 
         return $order->id;
     }
- public function addTransactionId($id_order, $id_transaction, $product_code) {
+
+    public function addTransactionId($id_order, $id_transaction, $product_code) {
         if (version_compare(_PS_VERSION_, '1.5', '>=')) {
             $new_order = new OrderCore((int) $id_order);
             if (Validate::isLoadedObject($new_order)) {
@@ -651,15 +652,6 @@ class Espay extends PaymentModule {
                 }
             }
         }
-    }
-    
-    public function genSignature($rqDatetime,$order_id,$mode){
-      $key = ConfigurationCore::get('ESPAY_SIGNATURE_KEY');
-      $data = "##".$key."##".$rqDatetime."##".$order_id."##".$mode."##";
-      
-      $upperCase = strtoupper($data);
-      $signature = hash('sha256', $upperCase);
-      return $signature;
     }
 
 }
