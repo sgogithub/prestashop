@@ -152,7 +152,7 @@ class Espay extends PaymentModule {
             Configuration::set('ESPAY_MANDIRISMS_FEE', 0);
         }
     }
-    
+
      public function install() {
         if (!parent::install() || !$this->registerHook('payment') || !$this->registerHook('orderConfirmation')) {
             return false;
@@ -478,13 +478,13 @@ class Espay extends PaymentModule {
     }
 
     private function _getListProduct() {
-        $url = (Tools::getValue('espay_environment') === 'production' ? 'https://116.90.162.172:812/' : 'http://116.90.162.170:10809') . '/rest/merchant/merchantinfo';
+        $url = (Tools::getValue('espay_environment') === 'production' ? 'https://api.espay.id/' : 'https://sandbox-api.espay.id') . '/rest/merchant/merchantinfo';
         $curl = new Curl();
         $param['key'] = Configuration::get('ESPAY_PAYMENT_KEY');
         $products = $curl->call($param, $url);
-        
-        
-        
+
+
+
         return $products;
     }
 
@@ -515,7 +515,7 @@ class Espay extends PaymentModule {
         }
         return array_unique($tabView);
     }
-    
+
      public function hookPayment($params) {
         if (!$this->active) {
             return;
@@ -523,20 +523,20 @@ class Espay extends PaymentModule {
 
         #var_dump($params['cart']->id);
         $cart = new CartCore($params['cart']->id);
-        
+
         #var_dump($cart->getOrderTotal());
         global $smarty;
-        
+
         $productView = '';
         $tabView = '';
-        
+
         $productList = $this->_getListProduct();
         if ($productList->error_code === '0000'){
             $productView = $this->_getProductView($productList);
             $tabView = $this->_listTabView($productList);
         }
-       
-        
+
+
         $smarty->assign(array(
             'error_code' => $productList->error_code,
             'i' => 0,
@@ -568,10 +568,10 @@ class Espay extends PaymentModule {
             }else{
                  $order_history = new OrderHistoryCore();
                  $order_history->id_order = $order_id;
-                 
+
                  $order_history->changeIdOrderState(ConfigurationCore::get('ESPAY_FAILED_STATUS'), $order_id);
                  $order_history->add();
-                   
+
             }
         }
 
@@ -652,11 +652,11 @@ class Espay extends PaymentModule {
             }
         }
     }
-    
+
     public function genSignature($rqDatetime,$order_id,$mode){
       $key = ConfigurationCore::get('ESPAY_SIGNATURE_KEY');
       $data = "##".$key."##".$rqDatetime."##".$order_id."##".$mode."##";
-      
+
       $upperCase = strtoupper($data);
       $signature = hash('sha256', $upperCase);
       return $signature;
