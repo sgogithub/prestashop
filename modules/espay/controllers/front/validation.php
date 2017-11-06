@@ -64,7 +64,7 @@ class EspayValidationModuleFrontController extends ModuleFrontController
                  $this->display_column_right = false;
                 
                 $env = ConfigurationCore::get('ESPAY_ENVIRONMENT');
-                $url_js = ($env === 'sandbox' ? 'http://secure-dev.sgo.co.id' : 'https://secure.sgo.co.id');
+                $url_js = ($env === 'sandbox' ? 'http://sandbox-kit.espay.id' : 'https://kit.espay.id');
                  
 		$this->context->smarty->assign(array(
 			'bank_code' => $this->_bank_code,

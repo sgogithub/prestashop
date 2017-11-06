@@ -47,7 +47,7 @@
                             <div class="col-sm-3 col-md-3 col-lg-3">
                                 <label class="thumbnail">
                                     <input type="radio" name="espayproduct" id="espayproduct" value=" {$product.bank}: {$product.product}">
-                                    <img src="https://secure.sgo.co.id/images/products/{$product.product}.png" >	
+                                    <img src="https://kit.espay.id/images/products/{$product.product}.png" >	
                                     <ul>
 
                                         {assign var="productfee" value="ESPAY_`$product.product`_FEE"}
