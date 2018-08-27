@@ -54,7 +54,10 @@ class Espay extends PaymentModule {
 
         $this->_typePayment = array (
             'PERMATAATM' => "ATM Transfer",
-            'BIIATM' => "ATM Transfer",
+            'BCAATM' => "ATM Transfer",
+            'MANDIRIATM' => "ATM Transfer",
+            'BRIATM' => "ATM Transfer",
+            'BNIATM' => "ATM Transfer",
             'BCAKLIKPAY' => "Online Payment",
             'DKIIB' => "Online Payment",
             "EPAYBRI" => "Online Payment",
@@ -89,6 +92,10 @@ class Espay extends PaymentModule {
             'ESPAY_EPAYBRI_FEE',
             'ESPAY_PERMATANETPAY_FEE',
             'ESPAY_PERMATAATM_FEE',
+            'ESPAY_MANDIRIATM_FEE',
+            'ESPAY_BCAATM_FEE',
+            'ESPAY_BNIATM_FEE',
+            'ESPAY_BRIATM_FEE',
             'ESPAY_BIIATM_FEE',
             'ESPAY_CREDITCARD_FEE',
             'ESPAY_CREDITCARD_MDR',
@@ -126,6 +133,18 @@ class Espay extends PaymentModule {
         }
         if (!isset($config['ESPAY_BIIATM_FEE'])) {
             Configuration::set('ESPAY_BIIATM_FEE', 0);
+        }
+        if (!isset($config['ESPAY_MANDIRIATM_FEE'])) {
+            Configuration::set('ESPAY_MANDIRIATM_FEE', 0);
+        }
+        if (!isset($config['ESPAY_BRIATM_FEE'])) {
+            Configuration::set('ESPAY_BRIATM_FEE', 0);
+        }
+        if (!isset($config['ESPAY_BNIATM_FEE'])) {
+            Configuration::set('ESPAY_BNIATM_FEE', 0);
+        }
+        if (!isset($config['ESPAY_BCAATM_FEE'])) {
+            Configuration::set('ESPAY_BCAATM_FEE', 0);
         }
         if (!isset($config['ESPAY_CREDITCARD_FEE'])) {
             Configuration::set('ESPAY_CREDITCARD_FEE', 0);
@@ -375,6 +394,30 @@ class Espay extends PaymentModule {
                         'name' => 'ESPAY_PERMATAATM_FEE',
                         'desc' => $this->l('Consult to ESpay Merchant Administrator for the value of this field.'),
                     ),
+                     array(
+                        'type' => 'text',
+                        'label' => 'MANDIRI Virtual Account Fee',
+                        'name' => 'ESPAY_MANDIRIATM_FEE',
+                        'desc' => $this->l('Consult to ESpay Merchant Administrator for the value of this field.'),
+                    ),
+                      array(
+                        'type' => 'text',
+                        'label' => 'BNI Virtual Account Fee',
+                        'name' => 'ESPAY_BNIATM_FEE',
+                        'desc' => $this->l('Consult to ESpay Merchant Administrator for the value of this field.'),
+                    ),
+                       array(
+                        'type' => 'text',
+                        'label' => 'BRI Virtual Account Fee',
+                        'name' => 'ESPAY_BRIATM_FEE',
+                        'desc' => $this->l('Consult to ESpay Merchant Administrator for the value of this field.'),
+                    ),
+                        array(
+                        'type' => 'text',
+                        'label' => 'BCA Virtual Account Fee',
+                        'name' => 'ESPAY_BCAATM_FEE',
+                        'desc' => $this->l('Consult to ESpay Merchant Administrator for the value of this field.'),
+                    ),
                     array(
                         'type' => 'text',
                         'label' => 'Maybank Virtual Account Fee',
@@ -563,7 +606,7 @@ class Espay extends PaymentModule {
         if ($order_state === ConfigurationCore::get('ESPAY_SUCCESS_STATUS')) {
             $status = 'sukses';
         } else {
-            if ($order->payment === 'BIIATM' || $order->payment === 'PERMATAATM' || $order->payment === 'FINPAY195') {
+            if ($order->payment === 'BIIATM' || $order->payment === 'BCAATM' || $order->payment === 'BNIATM' || $order->payment === 'MANDIRIATM' || $order->payment === 'BRIATM' || $order->payment === 'PERMATAATM' || $order->payment === 'FINPAY195') {
                 $status = 'waiting';
             }else{
                  $order_history = new OrderHistoryCore();
